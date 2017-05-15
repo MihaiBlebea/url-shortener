@@ -1,7 +1,7 @@
 # URL-Shortener
 
 <p align="center">
-<a href="" target="_blank"><img src=""></a>
+<img src="https://raw.githubusercontent.com/SerbanBlebea/url-shortener/master/img/url-shortener-logo.png">
 </p>
 
 ## Menu

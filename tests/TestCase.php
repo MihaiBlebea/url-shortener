@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 use SerbanBlebea\UrlShortener\UrlShortenerServiceProvider;
 
-abstract class TestCase extends Orchestra\TestBench\TestCase
+abstract class TestCase extends Orchestra\Testbench\TestCase
 {
-    protected function getPackageProvider($app)
+    protected function getPackageProviders($app)
     {
         return [UrlShortenerServiceProvider::class];
     }
@@ -17,18 +17,36 @@ abstract class TestCase extends Orchestra\TestBench\TestCase
 
         $this->artisan('migrate', [
             '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__ . '/../migrations'),
+            '--path' => realpath(__DIR__ . '/../migrations'),
         ]);
     }
 
-    protected function getEnvironmentSetup($app)
+    public function tearDown()
+    {
+        \Schema::drop('links');
+    }
+
+    protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('database.default', 'testbench');
 
         $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
+
+        \Schema::create('links', function ($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('unique_id');
+            $table->string('destination_link');
+            $table->integer('count')->default(0);
+            $table->string('campaign')->nullable();
+            $table->string('source')->nullable();
+            $table->string('medium')->nullable();
+            $table->timestamp('reset_date')->nullable();
+            $table->timestamps();
+        });
     }
 }

@@ -10,7 +10,6 @@ class ConstructDestinationLinkHelper
 
         if($campaign !== '')
         {
-            //dd($campaign);
             $urlParams = 'campaign=' . $campaign . '&';
         }
 

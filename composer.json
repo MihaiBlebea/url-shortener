@@ -12,11 +12,6 @@
             "SerbanBlebea\\UrlShortener\\": "src"
         }
     },
-    "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
-    },
     "require": {
         "php": ">=5.5.0",
         "illuminate/database": ">=5.0",
@@ -25,5 +20,10 @@
     "require-dev": {
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "~5.0"
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
     }
 }

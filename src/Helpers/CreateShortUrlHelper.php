@@ -24,17 +24,21 @@ class CreateShortUrlHelper
             return ErrorHandler::notValidUrl();
         }
 
-        Link::create([
+        $unique_id = $this->unique_id();
+
+        $short_url = Link::create([
             'name' => $name,
-            'unique_id' => $this->unique_id(),
+            'unique_id' => $unique_id,
             'destination_link' => $destination_link,
             'campaign' => $campaign,
             'source' => $source,
             'medium' => $medium,
         ]);
+
+        return $short_url->create_short_url();
     }
 
-    public function unique_id()
+    public static function unique_id()
     {
         $string = str_random(8);
         $links = Link::all();

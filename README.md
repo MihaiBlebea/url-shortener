@@ -167,4 +167,26 @@ class TestController extends Controller
 }
 ```
 
+### Step 5. Reset the tracking counter
+
+There is a method to reset the tracking counter. Very easy to use.
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use SerbanBlebea\UrlShortener\Model\Link;
+
+class TestController extends Controller
+{
+    public function resetCount()
+    {
+        $link = Link::where('name', 'name-of-the-short-url')->first();
+        $link->resetCounter();
+    }
+}
+
+```
+
 ## Testing

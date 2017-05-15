@@ -1,6 +1,5 @@
-
-<p align="center">
 # URL-Shortener
+<p align="center">
 <a href="https://laravel.com" target="_blank"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></a>
 </p>
 

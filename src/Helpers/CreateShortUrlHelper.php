@@ -45,8 +45,9 @@ class CreateShortUrlHelper
 
         if($links->contains($string)) {
             $string = str_random(8);
-        } else {
-            return $string;
         }
+
+        return $string;
+
     }
 }

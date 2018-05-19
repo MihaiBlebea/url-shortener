@@ -50,7 +50,7 @@ class ShortUrl
             'source' => $source,
             'medium' => $medium,
         ]);
-
+        
         return $short_url;
     }
 

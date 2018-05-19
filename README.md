@@ -198,14 +198,23 @@ class TestController extends Controller
 }
 
 ```
-### Step 6. Special Command
+### Step 6. Special Commands
+
+#### url:make
 After you run `php artisan vendor:publish` (see above), you will also have access to a special command for creating short url from the CLI.
 
-Just type `php artisan make:shorter <just-url-after-app-root> <name-of-the-url>`
+Just type `php artisan url:make <just-url-after-app-root> <name-of-the-url>`
 
-For example: `php artisan make:shorter /test/page/1 FirstBlogPost`. This will create a short url with the name `FirstBlogPost`.
+For example: `php artisan url:make /test/page/1 FirstBlogPost`. This will create a short url with the name `FirstBlogPost`.
 
 The name of the url can be nulled in the CLI, this will generate a random string that you can change later
+
+#### url:print
+You can print all your short url's with one command line `php artisan url:print`
+
+If you want to search url by name, just add `php artisan url:print --name=<name-of-url-here>`
+
+Also you can search by destination with `php artisan url:print --dest=<name-of-destination-url>`
 
 
 ## Testing

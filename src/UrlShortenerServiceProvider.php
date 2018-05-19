@@ -3,7 +3,11 @@
 namespace SerbanBlebea\UrlShortener;
 
 use Illuminate\Support\ServiceProvider;
-use SerbanBlebea\UrlShortener\Commands\CreateShortUrl;
+use SerbanBlebea\UrlShortener\Commands\{
+    CreateShortUrl,
+    PrintUrl,
+    CreateFromRoute
+};
 use SerbanBlebea\UrlShortener\ShortUrl;
 
 class UrlShortenerServiceProvider extends ServiceProvider
@@ -20,7 +24,9 @@ class UrlShortenerServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                CreateShortUrl::class
+                CreateShortUrl::class,
+                PrintUrl::class,
+                CreateFromRoute::class
             ]);
         }
     }

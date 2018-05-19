@@ -12,7 +12,7 @@ class CreateShortUrl extends Command
      *
      * @var string
      */
-    protected $signature = 'make:shorter {url} {name?}';
+    protected $signature = 'url:make {url} {name?}';
 
     /**
      * The console command description.
@@ -35,7 +35,14 @@ class CreateShortUrl extends Command
             $name = $this->argument('name');
         }
 
-        $short_url = ShortUrl::shortenUrl($name, $this->argument('url'));
-        $this->info('Your short url: ' . $short_url->getShortUrl());
+        if($this->confirm('Are you sure you want to create a short url for ' . $this->argument('url') . '?'))
+        {
+            $short_url = ShortUrl::shortenUrl($name, $this->argument('url'));
+            if(is_string($short_url))
+            {
+                return $this->info($short_url);
+            }
+            return $this->info('Your short url: ' . $short_url->getShortUrl());
+        }
     }
 }

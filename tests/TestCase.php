@@ -31,9 +31,13 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
         $app['config']->set('database.default', 'testbench');
 
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver'   => 'mysql',
             'database' => ':memory:',
             'prefix'   => '',
+            'host'     => 'localhost',
+            'database' => 'laravel_playground',
+            'username' => 'root',
+            'password' => ''
         ]);
 
         \Schema::create('links', function ($table) {

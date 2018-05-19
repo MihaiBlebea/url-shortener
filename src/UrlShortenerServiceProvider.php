@@ -26,7 +26,6 @@ class UrlShortenerServiceProvider extends ServiceProvider
             $this->commands([
                 CreateShortUrl::class,
                 PrintUrl::class,
-                CreateFromRoute::class
             ]);
         }
     }

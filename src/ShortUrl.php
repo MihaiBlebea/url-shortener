@@ -50,7 +50,7 @@ class ShortUrl
             'source' => $source,
             'medium' => $medium,
         ]);
-        
+
         return $short_url;
     }
 
@@ -108,14 +108,18 @@ class ShortUrl
         return $destination_link . '?' . $urlParams;
     }
 
-    public function changeUniqueId(String $old_id, String $new_id)
+    public static function changeUniqueId(String $old_id, String $new_id)
     {
-        $link = Link::where('unique_id', $old_id)->update([
-            'unique_id' => $new_id,
-            'count' => 0
-        ]);
-
-        return $link->getShortUrl();
+        $link = Link::where('unique_id', $old_id)->first();
+        if($link)
+        {
+            $link->update([
+                'unique_id' => $new_id,
+                'count'     => 0
+            ]);
+            return $link;
+        }
+        return ErrorHandler::linkNotInDatabase();
     }
 
     public function get(String $name)

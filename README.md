@@ -61,7 +61,7 @@ This will be used to store the data for the short urls and the visitor count for
 ### Step 2. Publish the config file
 Run `php artisan vendor:publish` and select the package name to publish the config file `url-shortener.php` in the `config` folder.
 
-<strong>!IMPORTANT</strong> If you change the `special_route_param`, all your links will be nulled
+<strong>!IMPORTANT</strong> If you change the `special_route_param`, all your existing linksspread across the internet will be nulled, so I would setup this option before using the package in production
 
 ### Step 3. Create your first short url
 After you migrated the table, it's time to create your first short url:
@@ -198,5 +198,14 @@ class TestController extends Controller
 }
 
 ```
+### Step 6. Special Command
+After you run `php artisan vendor:publish` (see above), you will also have access to a special command for creating short url from the CLI.
+
+Just type `php artisan make:shorter <just-url-after-app-root> <name-of-the-url>`
+
+For example: `php artisan make:shorter /test/page/1 FirstBlogPost`. This will create a short url with the name `FirstBlogPost`.
+
+The name of the url can be nulled in the CLI, this will generate a random string that you can change later
+
 
 ## Testing

@@ -2,10 +2,10 @@
 
 namespace SerbanBlebea\UrlShortener\ErrorHandlers;
 
-class ErrorHandler 
+class ErrorHandler
 {
     public static function notUniqueName()
-    {    
+    {
         return 'The selected name for the short url is not unique';
     }
 
@@ -22,5 +22,10 @@ class ErrorHandler
     public static function newUniqueIdNotUnique()
     {
         return 'The new unique id is already in use';
+    }
+
+    public static function destinationUrlExists($destination_url)
+    {
+        return 'The destination you selected already exists in the database as: ' . $destination_url;
     }
 }

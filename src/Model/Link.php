@@ -2,16 +2,12 @@
 
 namespace SerbanBlebea\UrlShortener\Model;
 
-use SerbanBlebea\UrlShortener\Traits\ResetCounterTrait as Reset;
-use SerbanBlebea\UrlShortener\Traits\ChangeUniqueIdTrait as Change;
 use Illuminate\Database\Eloquent\Model;
-use SerbanBlebea\UrlShortener\Helpers\ConstructDestinationLinkHelper as Construct;
+use SerbanBlebea\UrlShortener\ShortUrl;
 use Illuminate\Support\Facades\URL;
 
 class Link extends Model
 {
-    use Reset, Change;
-
     protected $fillable = [
         'name',
         'unique_id',
@@ -28,21 +24,47 @@ class Link extends Model
         return 'unique_id';
     }
 
-    public function getShortUrl()
+    public function getDestinationUrl()
     {
-        if($this->campaign == null && $this->medium == null && $this->source == null) 
+        if($this->campaign == null && $this->medium == null && $this->source == null)
         {
             return $this->destination_link;
         } else {
-            $destination_link = Construct::urlWithParams($this->destination_link, $this->campaign, $this->medium, $this->source);
+            $destination_link = ShortUrl::urlWithParams($this->destination_link, $this->campaign, $this->medium, $this->source);
             return $destination_link;
         }
     }
 
-    public function create_short_url()
+    public function getShortUrl(String $unique_id = null)
     {
-        $base_url = URL::to('/');
+        $id = ($unique_id == null) ? $this->unique_id : $unique_id;
+        return URL::to('/') . '/' . config('url-shortener.special_route_param') . '/' . $id;
+    }
 
-        return $base_url . '/s/' . $this->unique_id;
+    public function resetCounter()
+    {
+        $this->update([
+            'count' => 0,
+            'reset_date' => Carbon::now(),
+        ]);
+    }
+
+    public function changeUniqueId($newUniqueId)
+    {
+        $links = Link::all();
+
+        foreach($links as $link)
+        {
+            if($link->unique_id == $newUniqueId)
+            {
+                return ErrorHandler::newUniqueIdNotUnique();
+            }
+        }
+
+        $this->update([
+            'unique_id' => $newUniqueId
+        ]);
+
+        return true;
     }
 }

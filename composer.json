@@ -1,12 +1,19 @@
 {
     "name": "serbanblebea/urlshortener",
     "description": "This is a package for creating short url links that track conversion for a Laravel website or web app.",
+    "keywords": ["urlshortener", "laravel", "url tracking"],
     "authors": [
         {
-            "name": "Serban Blebea",
-            "email": "slabestecuserban@gmail.com"
+            "name": "Serban Mihai Blebea",
+            "email": "mihaiserban.blebea@gmail.com",
+            "homepage": "http://www.slabestecuserban.ro",
+            "role": "Developer"
         }
     ],
+    "support": {
+        "email": "mihaiserban.blebea@gmail.com"
+    },
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "SerbanBlebea\\UrlShortener\\": "src"

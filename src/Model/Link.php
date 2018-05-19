@@ -48,23 +48,4 @@ class Link extends Model
             'reset_date' => Carbon::now(),
         ]);
     }
-
-    public function changeUniqueId($newUniqueId)
-    {
-        $links = Link::all();
-
-        foreach($links as $link)
-        {
-            if($link->unique_id == $newUniqueId)
-            {
-                return ErrorHandler::newUniqueIdNotUnique();
-            }
-        }
-
-        $this->update([
-            'unique_id' => $newUniqueId
-        ]);
-
-        return true;
-    }
 }

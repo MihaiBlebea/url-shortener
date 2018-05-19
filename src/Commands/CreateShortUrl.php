@@ -36,6 +36,6 @@ class CreateShortUrl extends Command
         }
 
         $short_url = ShortUrl::shortenUrl($name, $this->argument('url'));
-        $this->info('Your short url: ' . $short_url);
+        $this->info('Your short url: ' . $short_url->getShortUrl());
     }
 }

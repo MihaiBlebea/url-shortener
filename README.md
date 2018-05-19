@@ -14,7 +14,7 @@
 ## About URL-Shortener
 URL-Shortener is a package for creating short url links that track conversions for Laravel apps or websites.
 
-Just like bit.ly, you can create your own url shortening service in your Laravel app.
+Just like bit.ly, you can create a url shortening service in your Laravel app.
 
 Easy to install and easy to use.
 
@@ -33,7 +33,23 @@ Add this to the `composer.json` file:
 Or just use the command line:
 
     composer require serbanblebea/urlshortener
-    
+
+Then add the Service Provider and the Facade to the config/app.php file
+
+### UrlShortenerServiceProvider
+```php
+'providers' => [
+    SerbanBlebea\UrlShortener\UrlShortenerServiceProvider::class,
+];
+```
+
+### ShortUrl Facade
+```php
+'aliases' => [
+    'ShortUrl' => SerbanBlebea\UrlShortener\Facades\ShortUrl::class,
+];
+```
+
 ## Use URL-Shortener
 URL-Shortener is very easy to use:
 
@@ -42,26 +58,32 @@ Before using the package, use the command line `php artisan migrate` to migrate 
 
 This will be used to store the data for the short urls and the visitor count for every link.
 
-### Step 2. Create your first short url
+### Step 2. Publish the config file
+Run `php artisan vendor:publish` and select the package name to publish the config file `url-shortener.php` in the `config` folder.
+
+<strong>!IMPORTANT</strong> If you change the `special_route_param`, all your links will be nulled
+
+### Step 3. Create your first short url
 After you migrated the table, it's time to create your first short url:
 ```php
 <?php
 
 namespace App\Http\Controllers;
 
-use SerbanBlebea\UrlShortener\Helpers\CreateShortUrlHelper as CreateUrl;
+use SerbanBlebea\UrlShortener\ShortUrl;
 
 class TestController extends Controller
 {
     public function index()
     {
-        $url = new CreateUrl;
-        $url->shortenUrl('name-of-the-url', 'http://url-that-you-want-to-shorten.com');
-        
+        $url = ShortUrl::shortenUrl('name-of-the-url', 'http://url-that-you-want-to-shorten.com');
+        $short_url = $url->getShortUrl()
+        // return http://www.name-of-your-host.com/s/fs53rw7h
+        // 's' => name of the 'special_route_param' in config file
     }
 }
 ```
-### Step 3. Change the unique id
+### Step 4. Change the unique id
 Every short url has an unique id that is used for accessing the destination link.
 
 Exemple: `http://your-domain.com/s/unique-id`
@@ -75,22 +97,22 @@ You can do that with:
 
 namespace App\Http\Controllers;
 
-use SerbanBlebea\UrlShortener\Model\Link;
+use ShortUrl;
 
 class TestController extends Controller
 {
     public function index()
     {
-        // Get the specific url from database ($link)
-        $link = Link::where('name', 'name-of-the-url')->first();
-        
+        // old_id = 'eujfg849'
+        // new_id = 'soda'
+
         // Use this method to change the unique id
-        $link->changeUniqueId('new-id-of-the-url');
+        ShortUrl::changeUniqueId('eujfg849', 'soda');
     }
 }
 ```
 
-This will be your new short url: `http://your-domain.com/s/new-id-of-the-url`
+This will be your new short url: `http://your-domain.com/s/soda`
 
 ### Step 4. Count clicks of add Google UTM taggs
 
@@ -103,20 +125,14 @@ Let's first look at how you can get the number of clicks from the database:
 
 namespace App\Http\Controllers;
 
-use SerbanBlebea\UrlShortener\Model\Link;
+use ShortUrl;
 
 class TestController extends Controller
 {
     public function index()
     {
         // Get the short url from database by url name
-        $link = Link::where('name', 'name-of-the-url')->first();
-        
-        // Get the short url from database by destination link
-        $link = Link::where('destination_link', 'http://www.the-destination-link.com')->first();
-        
-        // Get number of clicks
-        $count = $link->count;
+        ShortUrl::count('name-of-url');
     }
 }
 ```
@@ -129,14 +145,13 @@ Add tracking when you create the short url:
 
 namespace App\Http\Controllers;
 
-use SerbanBlebea\UrlShortener\Helpers\CreateShortUrlHelper as CreateUrl;
+use ShortUrl;
 
 class TestController extends Controller
 {
     public function index()
     {   
-        $url = new CreateUrl;
-        $url->shortenUrl('name-of-the-url', 'http://url-that-you-want-to-shorten.com', 'campaign-name', 'medium-name', 'source-name');
+        $url = ShortUrl::shortenUrl('name-of-the-url', 'http://url-that-you-want-to-shorten.com', 'campaign-name', 'medium-name', 'source-name');
     }
 }
 ```
@@ -147,18 +162,14 @@ Or add tracking after you created the short url:
 
 namespace App\Http\Controllers;
 
-use SerbanBlebea\UrlShortener\Model\Link;
-use SerbanBlebea\UrlShortener\Helpers\CreateShortUrlHelper as CreateUrl;
+use ShortUrl;
 
 class TestController extends Controller
 {
     public function index()
     {   
-        $url = new CreateUrl;
-        $url->shortenUrl('name-of-the-url', 'http://url-that-you-want-to-shorten.com');
-        
-        $link = Link::where('name', 'name-of-the-url')->first();
-        $link->update([
+        $url = ShortUrl::shortenUrl('name-of-the-url', 'http://url-that-you-want-to-shorten.com');
+        $url->update([
             'campaign' => 'campaign-name',
             'medium' => 'medium-name',
             'source' => 'source-name'
@@ -176,14 +187,13 @@ There is a method to reset the tracking counter. Very easy to use.
 
 namespace App\Http\Controllers;
 
-use SerbanBlebea\UrlShortener\Model\Link;
+use ShortUrl;
 
 class TestController extends Controller
 {
     public function resetCount()
     {
-        $link = Link::where('name', 'name-of-the-short-url')->first();
-        $link->resetCounter();
+        $count = ShortUrl::get('name-of-the-short-url')->resetCounter();
     }
 }
 
